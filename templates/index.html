@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>หน้าแรก - ข้อมูลโครงงาน</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+  <h1>รายการโครงงาน</h1>
+
+  <table id="projectTable" class="display">
+    <thead>
+      <tr>
+        <th>ชื่อโครงงาน</th>
+        <th>ภาษา</th>
+        <th>Framework</th>
+        <th>การกระทำ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for id, name, language, framework in projects %}
+      <tr>
+        <td>{{ name }}</td>
+        <td>{{ language }}</td>
+        <td>{{ framework }}</td>
+        <td><a href="{{ url_for('view_project', project_id=id) }}">ดูรายละเอียด</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>เพิ่มโครงงานใหม่</h2>
+  <form action="/submit_project" method="POST" enctype="multipart/form-data">
+    <input type="text" name="project_name" placeholder="ชื่อโครงงาน" required><br>
+    <textarea id="description" name="description" rows="10" cols="50" required></textarea><br>
+
+    <label for="language">ภาษา:</label><br>
+    <input list="language-options" name="programming_language" id="language" required>
+    <datalist id="language-options">
+      <option value="Python">
+      <option value="JavaScript">
+      <option value="C#">
+      <option value="Java">
+      <option value="Go">
+      <option value="Dart">
+    </datalist><br><br>
+
+    <label for="framework">Framework:</label><br>
+    <input list="framework-options" name="framework" id="framework" required>
+    <datalist id="framework-options">
+      <option value="Flask">
+      <option value="Django">
+      <option value="React">
+      <option value="Angular">
+      <option value="Flutter">
+      <option value="Vue.js">
+    </datalist><br><br>
+
+    <label for="libraries">Libraries (คั่นด้วย ,):</label><br>
+    <input type="text" name="libraries" placeholder="Libraries"><br>
+
+    <label for="file">แนบไฟล์ (เช่น pdf, docx, png):</label><br>
+    <input type="file" name="files" id="files" multiple><br><br>
+
+    <button type="submit">บันทึก</button>
+  </form>
+
+  <script>
+    $(document).ready(function() {
+      $('#projectTable').DataTable({
+        language: {
+          search: "ค้นหา:",
+          lengthMenu: "แสดง _MENU_ รายการ",
+          info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+          paginate: {
+            previous: "ก่อนหน้า",
+            next: "ถัดไป"
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

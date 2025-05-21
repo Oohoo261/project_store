@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>แก้ไขโครงงาน</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>แก้ไขโครงงาน</h1>
+  <form method="POST" enctype="multipart/form-data">
+    <input type="text" name="project_name" value="{{ project[1] }}" required><br>
+    <textarea name="description" required>{{ project[2] }}</textarea><br>
+    <input type="text" name="programming_language" value="{{ project[3] }}" required><br>
+    <input type="text" name="framework" value="{{ project[4] }}" required><br>
+    <input type="text" name="libraries" value="{{ project[5] }}"><br>
+    <label for="file">แนบไฟล์ใหม่ (ไม่บังคับ):</label><br>
+    <input type="file" name="files" id="files" multiple><br><br>
+    <button type="submit">บันทึกการเปลี่ยนแปลง</button>
+  </form>
+  <a href="{{ url_for('view_project', project_id=project[0]) }}">ย้อนกลับ</a>
+</body>
+</html>
