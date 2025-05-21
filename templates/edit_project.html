@@ -10,13 +10,112 @@
   <form method="POST" enctype="multipart/form-data">
     <input type="text" name="project_name" value="{{ project[1] }}" required><br>
     <textarea name="description" required>{{ project[2] }}</textarea><br>
-    <input type="text" name="programming_language" value="{{ project[3] }}" required><br>
-    <input type="text" name="framework" value="{{ project[4] }}" required><br>
+    <!-- ตัวอย่างสำหรับภาษา -->
+<label for="language">ภาษา:</label><br>
+<div id="language-container">
+  {% set languages = project[3].split(',') if project[3] else [''] %}
+  {% for lang in languages %}
+    <input type="text" name="programming_language[]" list="language-options" value="{{ lang.strip() }}" required><br>
+  {% endfor %}
+</div>
+<button type="button" id="add-language-btn">เพิ่มภาษา</button>
+
+<datalist id="language-options">
+  <option value="Python">
+  <option value="JavaScript">
+  <option value="C#">
+  <option value="Java">
+  <option value="Go">
+  <option value="Dart">
+</datalist><br><br>
+
+<!-- สำหรับ Framework -->
+<label for="framework">Framework:</label><br>
+<div id="framework-container">
+  {% set frameworks = project[4].split(',') if project[4] else [''] %}
+  {% for fw in frameworks %}
+    <input type="text" name="framework[]" list="framework-options" value="{{ fw.strip() }}" required><br>
+  {% endfor %}
+</div>
+<button type="button" id="add-framework-btn">เพิ่ม Framework</button>
+
+<datalist id="framework-options">
+  <option value="Flask">
+  <option value="Django">
+  <option value="React">
+  <option value="Angular">
+  <option value="Flutter">
+  <option value="Vue.js">
+</datalist><br><br>
     <input type="text" name="libraries" value="{{ project[5] }}"><br>
+    <label for="theory">หลักการและทฤษฎี:</label><br>
+    <textarea name="theory" rows="5" cols="50">{{ project[12] }}</textarea><br>
     <label for="file">แนบไฟล์ใหม่ (ไม่บังคับ):</label><br>
     <input type="file" name="files" id="files" multiple><br><br>
+    <label for="members">รายชื่อสมาชิกกลุ่ม (คั่นด้วย ,):</label><br>
+    <input type="text" name="members" value="{{ project[7] }}"><br>
+
+    <label for="advisor">อาจารย์ที่ปรึกษา:</label><br>
+    <input type="text" name="advisor" value="{{ project[8] }}"><br>
+
+    <label for="committee1">กรรมการคนที่ 1:</label><br>
+    <input type="text" name="committee1" value="{{ project[9] }}"><br>
+
+    <label for="committee2">กรรมการคนที่ 2:</label><br>
+    <input type="text" name="committee2" value="{{ project[10] }}"><br>
+
+    <label for="semester">เทอม / ปีการศึกษา:</label><br>
+    <input type="text" name="semester" value="{{ project[11] }}"><br>
+
+    <label for="advisor_meeting_dates">วันที่เข้าพบอาจารย์ที่ปรึกษา:</label><br>
+    <div id="advisor-dates-container">
+  {% set dates = project[13].split(',') if project[13] else [] %}
+  {% if dates %}
+    {% for date in dates %}
+      <input type="date" name="advisor_meeting_dates[]" value="{{ date }}" required><br>
+    {% endfor %}
+  {% else %}
+    <input type="date" name="advisor_meeting_dates[]" required><br>
+  {% endif %}
+</div>
+<button type="button" id="add-advisor-date-btn">เพิ่มวันที่เข้าพบ</button>
+<br><br>
+
     <button type="submit">บันทึกการเปลี่ยนแปลง</button>
   </form>
   <a href="{{ url_for('view_project', project_id=project[0]) }}">ย้อนกลับ</a>
 </body>
+<script>
+  document.getElementById('add-language-btn').addEventListener('click', function() {
+    const container = document.getElementById('language-container');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'programming_language[]';
+    input.setAttribute('list', 'language-options');
+    input.required = true;
+    container.appendChild(document.createElement('br'));
+    container.appendChild(input);
+  });
+
+  document.getElementById('add-framework-btn').addEventListener('click', function() {
+    const container = document.getElementById('framework-container');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'framework[]';
+    input.setAttribute('list', 'framework-options');
+    input.required = true;
+    container.appendChild(document.createElement('br'));
+    container.appendChild(input);
+  });
+
+  document.getElementById('add-advisor-date-btn').addEventListener('click', function() {
+    const container = document.getElementById('advisor-dates-container');
+    const input = document.createElement('input');
+    input.type = 'date';
+    input.name = 'advisor_meeting_dates[]';
+    input.required = true;
+    container.appendChild(document.createElement('br'));
+    container.appendChild(input);
+  });
+</script>
 </html>

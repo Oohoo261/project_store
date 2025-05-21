@@ -13,7 +13,7 @@
     <p><strong>ภาษา:</strong> {{ project[3] }}</p>
     <p><strong>Framework:</strong> {{ project[4] }}</p>
     <p><strong>Libraries:</strong> {{ project[5] }}</p>
-
+    <p><strong>หลักการและทฤษฎี:</strong> {{ project[12] }}</p>
     {% if project[6] %}
     <p><strong>ไฟล์แนบ:</strong>
     {% for filename in project[6].split(',') %}
@@ -23,6 +23,24 @@
 {% else %}
   <p><strong>ไฟล์แนบ:</strong> ไม่มีไฟล์แนบ</p>
 {% endif %}
+
+  <p><strong>สมาชิกกลุ่ม:</strong> {{ project[7] }}</p>
+  <p><strong>อาจารย์ที่ปรึกษา:</strong> {{ project[8] }}</p>
+  <p><strong>กรรมการ 1:</strong> {{ project[9] }}</p>
+  <p><strong>กรรมการ 2:</strong> {{ project[10] }}</p>
+  <p><strong>เทอม / ปีการศึกษา:</strong> {{ project[11] }}</p>
+  <p><strong>วันที่เข้าพบอาจารย์ที่ปรึกษา:</strong></p>
+    <ul>
+    {% if project[13] %}
+      {% for date in project[13].split(',') %}
+        <li>{{ date }}</li>
+      {% endfor %}
+    {% else %}
+      <li>ยังไม่มีข้อมูล</li>
+    {% endif %}
+    </ul>
+
+
 
 
     <a href="{{ url_for('edit_project', project_id=project[0]) }}">แก้ไข</a> |

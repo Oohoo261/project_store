@@ -31,39 +31,81 @@
       {% endfor %}
     </tbody>
   </table>
+  <form method="GET" action="/export_projects">
+  <button type="submit">Export ข้อมูลทั้งหมด</button>
+  </form>
+
 
   <h2>เพิ่มโครงงานใหม่</h2>
   <form action="/submit_project" method="POST" enctype="multipart/form-data">
     <input type="text" name="project_name" placeholder="ชื่อโครงงาน" required><br>
     <textarea id="description" name="description" rows="10" cols="50" required></textarea><br>
 
-    <label for="language">ภาษา:</label><br>
-    <input list="language-options" name="programming_language" id="language" required>
-    <datalist id="language-options">
-      <option value="Python">
-      <option value="JavaScript">
-      <option value="C#">
-      <option value="Java">
-      <option value="Go">
-      <option value="Dart">
-    </datalist><br><br>
+    <!-- แทนที่ช่องภาษาเดิม -->
 
-    <label for="framework">Framework:</label><br>
-    <input list="framework-options" name="framework" id="framework" required>
-    <datalist id="framework-options">
-      <option value="Flask">
-      <option value="Django">
-      <option value="React">
-      <option value="Angular">
-      <option value="Flutter">
-      <option value="Vue.js">
-    </datalist><br><br>
+<label for="language">ภาษา:</label><br>
+<div id="language-container">
+  <input type="text" name="programming_language[]" list="language-options" required>
+</div>
+<button type="button" id="add-language-btn">เพิ่มภาษา</button>
+
+<datalist id="language-options">
+  <option value="Python">
+  <option value="JavaScript">
+  <option value="C#">
+  <option value="Java">
+  <option value="Go">
+  <option value="Dart">
+</datalist><br><br>
+
+<!-- แทนที่ช่อง Framework เดิม -->
+
+<label for="framework">Framework:</label><br>
+<div id="framework-container">
+  <input type="text" name="framework[]" list="framework-options" required>
+</div>
+<button type="button" id="add-framework-btn">เพิ่ม Framework</button>
+
+<datalist id="framework-options">
+  <option value="Flask">
+  <option value="Django">
+  <option value="React">
+  <option value="Angular">
+  <option value="Flutter">
+  <option value="Vue.js">
+</datalist><br><br>
 
     <label for="libraries">Libraries (คั่นด้วย ,):</label><br>
     <input type="text" name="libraries" placeholder="Libraries"><br>
 
+    <label for="theory">หลักการและทฤษฎี:</label><br>
+    <textarea name="theory" rows="5" cols="50"></textarea><br>
+
     <label for="file">แนบไฟล์ (เช่น pdf, docx, png):</label><br>
     <input type="file" name="files" id="files" multiple><br><br>
+
+    <label for="members">รายชื่อสมาชิกกลุ่ม (คั่นด้วย ,):</label><br>
+    <input type="text" name="members" placeholder="เช่น สมชาย, สมหญิง"><br>
+
+    <label for="advisor">อาจารย์ที่ปรึกษา:</label><br>
+    <input type="text" name="advisor"><br>
+
+    <label for="committee1">กรรมการคนที่ 1:</label><br>
+    <input type="text" name="committee1"><br>
+
+    <label for="committee2">กรรมการคนที่ 2:</label><br>
+    <input type="text" name="committee2"><br>
+
+    <label for="semester">เทอม / ปีการศึกษา:</label><br>
+    <input type="text" name="semester" placeholder="เทอม 1 / 2567"><br>
+
+    <label for="advisor_meeting_dates">วันที่เข้าพบอาจารย์ที่ปรึกษา:</label><br>
+<div id="advisor-dates-container">
+  <input type="date" name="advisor_meeting_dates[]" required>
+</div>
+<button type="button" id="add-advisor-date-btn">เพิ่มวันที่เข้าพบ</button>
+<br><br>
+
 
     <button type="submit">บันทึก</button>
   </form>
@@ -82,6 +124,38 @@
         }
       });
     });
+
+    document.getElementById('add-language-btn').addEventListener('click', function() {
+    const container = document.getElementById('language-container');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'programming_language[]';
+    input.setAttribute('list', 'language-options');
+    input.required = true;
+    container.appendChild(document.createElement('br'));
+    container.appendChild(input);
+  });
+
+  document.getElementById('add-framework-btn').addEventListener('click', function() {
+    const container = document.getElementById('framework-container');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'framework[]';
+    input.setAttribute('list', 'framework-options');
+    input.required = true;
+    container.appendChild(document.createElement('br'));
+    container.appendChild(input);
+  });
+
+  document.getElementById('add-advisor-date-btn').addEventListener('click', function() {
+    const container = document.getElementById('advisor-dates-container');
+    const input = document.createElement('input');
+    input.type = 'date';
+    input.name = 'advisor_meeting_dates[]';
+    input.required = true;
+    container.appendChild(document.createElement('br'));
+    container.appendChild(input);
+  });
   </script>
 </body>
 </html>
