@@ -9,8 +9,8 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'data', 'uploads')
-DATABASE_PATH = os.path.join(BASE_DIR, 'data', 'projects.db')
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
+DATABASE_PATH = os.path.join(BASE_DIR, 'static', 'uploads', 'projects.db')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
