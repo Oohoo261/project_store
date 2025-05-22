@@ -8,7 +8,9 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
+DATABASE_PATH = os.path.join(BASE_DIR, 'database', 'projects.db')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -19,7 +21,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def init_db():
-    with sqlite3.connect('projects.db') as conn:
+    with sqlite3.connect(DATABASE_PATH) as conn:
         conn.execute('''
             CREATE TABLE IF NOT EXISTS projects (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,7 +45,7 @@ def init_db():
 
 @app.route('/')
 def index():
-    conn = sqlite3.connect('projects.db')
+    conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT id, name, language, framework FROM projects")
     projects = cursor.fetchall()
@@ -52,7 +54,7 @@ def index():
 
 @app.route('/project/<int:project_id>')
 def view_project(project_id):
-    conn = sqlite3.connect('projects.db')
+    conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM projects WHERE id = ?", (project_id,))
     project = cursor.fetchone()
@@ -61,7 +63,7 @@ def view_project(project_id):
 
 @app.route('/edit_project/<int:project_id>', methods=['GET', 'POST'])
 def edit_project(project_id):
-    conn = sqlite3.connect('projects.db')
+    conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
 
     if request.method == 'POST':
@@ -145,7 +147,7 @@ def edit_project(project_id):
 
 @app.route('/delete_project/<int:project_id>')
 def delete_project(project_id):
-    conn = sqlite3.connect('projects.db')
+    conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT filename FROM projects WHERE id = ?", (project_id,))
     row = cursor.fetchone()
@@ -198,7 +200,7 @@ def submit_project():
 
     filename_str = ",".join(saved_filenames) if saved_filenames else None
 
-    conn = sqlite3.connect('projects.db')
+    conn = sqlite3.connect(DATABASE_PATH)
     conn.execute("""
         INSERT INTO projects (name, description, language, framework, libraries, filename,
                               members, advisor, committee1, committee2, semester, theory,
@@ -214,7 +216,7 @@ def submit_project():
 
 @app.route('/export_projects', methods=['GET'])
 def export_projects():
-    conn = sqlite3.connect('projects.db')
+    conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM projects")
     rows = cursor.fetchall()
@@ -238,4 +240,6 @@ def export_projects():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
+
